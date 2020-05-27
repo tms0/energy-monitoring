@@ -1,0 +1,4 @@
+chronograf/data/
+influxdb/data/
+kapacitor/data/
+.env

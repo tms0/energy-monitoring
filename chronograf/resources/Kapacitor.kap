@@ -1,0 +1,8 @@
+{
+  "id": "10001",
+  "srcID": "10000",
+  "name": "Kapacitor",
+  "url": "http://kapacitor:9092",
+  "active": true,
+  "organization": "{{ .CHRONOGRAF_ORGANIZATION }}"
+}

@@ -1,0 +1,3 @@
+CREATE DATABASE energy_monitoring
+CREATE CONTINUOUS QUERY teleinfo_historique_energy_consumption_total ON energy_monitoring BEGIN SELECT max(energy_consumption_hp) + max(energy_consumption_hc) as energy_consumption_total INTO energy_monitoring.autogen.teleinfo FROM "energy_monitoring"."autogen"."teleinfo" GROUP BY time(1m),* END
+CREATE CONTINUOUS QUERY teleinfo_historique_power_consumption_total ON energy_monitoring BEGIN SELECT derivative(first(energy_consumption_total), 1h) as power_consumption INTO energy_monitoring.autogen.teleinfo FROM "energy_monitoring"."autogen"."teleinfo" GROUP BY time(1m),* END

@@ -1,0 +1,85 @@
+version: '2.4'
+services:
+  influxdb:
+    user: "${UID}:${GUID}"
+    image: influxdb:latest
+    restart: always
+    volumes:
+      # Mount for influxdb data directory
+      - ./influxdb/data:/var/lib/influxdb
+      # Mount for influxdb configuration
+      - ./influxdb/config/:/etc/influxdb/
+    ports:
+      # The API for InfluxDB is served on port 8086
+      - "8086:8086"
+      - "8082:8082"
+
+  telegraf:
+    user: "${UID}:${GUID}"
+    image: telegraf:latest
+    restart: always
+    command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
+    environment:
+      HOST_ETC: /hostfs/etc
+      HOST_PROC: /hostfs/proc
+      HOST_SYS: /hostfs/sys
+      HOST_MOUNT_PREFIX: /hostfs
+      HOSTNAME:
+      FRONIUS_LISTENER_ADDRESS:
+      MQTT_SERVER:
+    volumes:
+      # Mount for telegraf configuration
+      - ./telegraf/:/etc/telegraf/
+      # Mount for Docker API access
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Mounts for host monitoring
+      - /:/hostfs:ro
+      - /etc:/hostfs/etc:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+      - /var/run/utmp:/var/run/utmp:ro
+    ports:
+      - "8090:8090"
+    depends_on:
+      - influxdb
+
+  kapacitor:
+    user: "${UID}:${GUID}"
+    image: kapacitor:latest
+    restart: always
+    environment:
+      - KAPACITOR_SMTP_ENABLED
+      - KAPACITOR_SMTP_HOST
+      - KAPACITOR_SMTP_PORT
+      - KAPACITOR_SMTP_USERNAME
+      - KAPACITOR_SMTP_PASSWORD 
+      - KAPACITOR_SMTP_FROM
+      - KAPACITOR_SMTP_TO_0
+    volumes:
+      # Mount for kapacitor data directory
+      - ./kapacitor/data/:/var/lib/kapacitor
+      # Mount for kapacitor configuration
+      - ./kapacitor/config/:/etc/kapacitor/
+    ports:
+      # The API for Kapacitor is served on port 9092
+      - "9092:9092"
+
+  chronograf:
+    user: "${UID}:${GUID}"
+    image: "chronograf:latest"
+    restart: always
+    environment:
+      RESOURCES_PATH: "/usr/share/chronograf/resources"
+      CHRONOGRAF_ORGANIZATION:
+    volumes:
+      # Mount for chronograf database
+      - ./chronograf/data/:/var/lib/chronograf/
+      # Mount for chronograf resources
+      - ./chronograf/resources/:/usr/share/chronograf/resources/
+    ports:
+      # The WebUI for Chronograf is served on port 8888
+      - "8888:8888"
+    depends_on:
+      - kapacitor
+      - influxdb
+      - telegraf
