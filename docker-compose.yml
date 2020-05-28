@@ -24,9 +24,9 @@ services:
       HOST_PROC: /hostfs/proc
       HOST_SYS: /hostfs/sys
       HOST_MOUNT_PREFIX: /hostfs
+      MQTT_SERVER: tcp://mosquitto:1883
       HOSTNAME:
       FRONIUS_LISTENER_ADDRESS:
-      MQTT_SERVER:
     volumes:
       # Mount for telegraf configuration
       - ./telegraf/:/etc/telegraf/
@@ -66,7 +66,7 @@ services:
 
   chronograf:
     user: "${UID}:${GUID}"
-    image: "chronograf:latest"
+    image: chronograf:latest
     restart: always
     environment:
       RESOURCES_PATH: "/usr/share/chronograf/resources"
@@ -83,3 +83,13 @@ services:
       - kapacitor
       - influxdb
       - telegraf
+
+  mosquitto:
+    user: "${UID}:${GUID}"
+    image: eclipse-mosquitto:latest
+    restart: always
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data/:/mosquitto/data/
+    ports:
+      - 1883:1883
