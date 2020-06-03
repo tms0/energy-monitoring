@@ -71,6 +71,7 @@ services:
     environment:
       RESOURCES_PATH: "/usr/share/chronograf/resources"
       CHRONOGRAF_ORGANIZATION:
+      LOG_LEVEL: "error"
     volumes:
       # Mount for chronograf database
       - ./chronograf/data/:/var/lib/chronograf/
