@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   influxdb:
-    user: "${UID}:${GUID}"
+    user: "${UID}:${GID}"
     image: influxdb:latest
     restart: always
     volumes:
@@ -15,7 +15,7 @@ services:
       - "8082:8082"
 
   telegraf:
-    user: "${UID}:${GUID}"
+    user: "${UID}:${GID}"
     image: telegraf:latest
     restart: always
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
@@ -44,7 +44,7 @@ services:
       - influxdb
 
   kapacitor:
-    user: "${UID}:${GUID}"
+    user: "${UID}:${GID}"
     image: kapacitor:latest
     restart: always
     environment:
@@ -65,7 +65,7 @@ services:
       - "9092:9092"
 
   chronograf:
-    user: "${UID}:${GUID}"
+    user: "${UID}:${GID}"
     image: chronograf:latest
     restart: always
     environment:
@@ -86,7 +86,7 @@ services:
       - telegraf
 
   mosquitto:
-    user: "${UID}:${GUID}"
+    user: "${UID}:${GID}"
     image: eclipse-mosquitto:latest
     restart: always
     volumes:
