@@ -9,10 +9,6 @@ services:
       - ./influxdb/data:/var/lib/influxdb
       # Mount for influxdb configuration
       - ./influxdb/config/:/etc/influxdb/
-    ports:
-      # The API for InfluxDB is served on port 8086
-      - "8086:8086"
-      - "8082:8082"
 
   telegraf:
     user: "${UID}:${GID}"
@@ -39,7 +35,7 @@ services:
       - /sys:/hostfs/sys:ro
       - /var/run/utmp:/var/run/utmp:ro
     ports:
-      - "8090:8090"
+      - "0.0.0.0:8090:8090"
     depends_on:
       - influxdb
 
@@ -60,9 +56,6 @@ services:
       - ./kapacitor/data/:/var/lib/kapacitor
       # Mount for kapacitor configuration
       - ./kapacitor/config/:/etc/kapacitor/
-    ports:
-      # The API for Kapacitor is served on port 9092
-      - "9092:9092"
 
   chronograf:
     user: "${UID}:${GID}"
@@ -79,18 +72,21 @@ services:
       - ./chronograf/resources/:/usr/share/chronograf/resources/
     ports:
       # The WebUI for Chronograf is served on port 8888
-      - "8888:8888"
+      - "0.0.0.0:8888:8888"
     depends_on:
       - kapacitor
       - influxdb
       - telegraf
 
   mosquitto:
-    user: "${UID}:${GID}"
+    user: "1883:1883"
     image: eclipse-mosquitto:latest
     restart: always
     volumes:
-      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ./mosquitto/data/:/mosquitto/data/
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto-data:/mosquitto/data/
     ports:
-      - 1883:1883
+      - 0.0.0.0:1883:1883
+
+volumes:
+  mosquitto-data:
