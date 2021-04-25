@@ -2,7 +2,7 @@ version: '2.4'
 services:
   influxdb:
     user: "${UID}:${GID}"
-    image: influxdb:latest
+    image: influxdb:1.8.5
     restart: always
     volumes:
       # Mount for influxdb data directory
@@ -12,7 +12,7 @@ services:
 
   telegraf:
     user: "${UID}:${GID}"
-    image: telegraf:latest
+    image: telegraf:1.18.1
     restart: always
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     environment:
@@ -41,7 +41,7 @@ services:
 
   kapacitor:
     user: "${UID}:${GID}"
-    image: kapacitor:latest
+    image: kapacitor:1.5.9
     restart: always
     environment:
       - KAPACITOR_SMTP_ENABLED
@@ -59,7 +59,7 @@ services:
 
   chronograf:
     user: "${UID}:${GID}"
-    image: chronograf:latest
+    image: chronograf:1.8.8
     restart: always
     environment:
       RESOURCES_PATH: "/usr/share/chronograf/resources"
@@ -80,10 +80,10 @@ services:
 
   mosquitto:
     user: "1883:1883"
-    image: eclipse-mosquitto:latest
+    image: eclipse-mosquitto:2.0.10
     restart: always
     volumes:
-      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
       - mosquitto-data:/mosquitto/data/
     ports:
       - 0.0.0.0:1883:1883
