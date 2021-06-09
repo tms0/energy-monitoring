@@ -80,7 +80,7 @@ services:
 
   mosquitto:
     user: "1883:1883"
-    image: eclipse-mosquitto:2.0.10
+    image: eclipse-mosquitto:2.0.11
     restart: always
     volumes:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
