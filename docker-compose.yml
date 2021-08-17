@@ -41,7 +41,7 @@ services:
 
   kapacitor:
     user: "${UID}:${GID}"
-    image: kapacitor:1.5.9
+    image: kapacitor:1.6.1
     restart: always
     environment:
       - KAPACITOR_SMTP_ENABLED
