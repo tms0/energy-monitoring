@@ -9,6 +9,8 @@ services:
       - ./influxdb/data:/var/lib/influxdb
       # Mount for influxdb configuration
       - ./influxdb/config/:/etc/influxdb/
+    ports:
+      - "127.0.0.1:8086:8086"
 
   telegraf:
     user: "${UID}:${GID}"
