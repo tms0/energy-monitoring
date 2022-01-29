@@ -14,7 +14,7 @@ services:
 
   telegraf:
     user: "${UID}:${GID}"
-    image: telegraf:1.21.2
+    image: telegraf:1.21.3
     restart: always
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     environment:
