@@ -2,7 +2,7 @@ version: '2.4'
 services:
   influxdb:
     user: "${UID}:${GID}"
-    image: influxdb:1.8.10
+    image: influxdb:2.1.1
     restart: always
     volumes:
       # Mount for influxdb data directory
