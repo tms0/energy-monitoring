@@ -61,7 +61,7 @@ services:
 
   chronograf:
     user: "${UID}:${GID}"
-    image: chronograf:1.9.4
+    image: chronograf:1.10.1
     restart: always
     environment:
       RESOURCES_PATH: "/usr/share/chronograf/resources"
