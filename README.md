@@ -1,3 +1,6 @@
+> **Warning**
+> Ce projet a été abandonné à la faveur de la solution "Energy" de Home Assistant.
+
 # Energy Monitoring
 
 Ce projet permet de suivre en temps réel la consommation et la production d'électricité de mon domicile. 
